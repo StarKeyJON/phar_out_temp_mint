@@ -32,8 +32,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await MarketMint.setNftAddress(NFT.address)
   console.log("All contracts are now deployed and operational!")
   console.log("_______________________________________________")
+  console.log("")
 
-  await MarketMint.redeemForNft(16, [
+  await MarketMint.redeemForNft(19, [
     "0x2f67a952b952593848D597102298ACf9253b841b", 
     "0x686218c292b04f4d2F6e4737C9134d6f6D8fd687", 
     "0xFcDd460A15aAD5Bc32A7CeaBb0DF9cAb1Ac7dcE4", 
@@ -49,7 +50,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     "0x117fc50b84b515efe3c82d8bbb2e1fa00751fea0",
     "0x1B3FEA07590E63Ce68Cb21951f3C133a35032473",
     "0xffad5d78dd52eb9538998472a22506bdea0632c3",
-    "0x846D8680978314C801AaBC12ccb5D482F9c033c1"
+    "0x8bace3A49A375027868CDd34e84521EeD1f1B01D",
+    "0xcb0F52Cb7363abb8C1a233B08f11Fe69ACf46C03",
+    "0x2a0e1FA231ae160974fE512CE3bE7e8190DC847E",
+    "0x39a79815fa7431434e49757ed4118b873ca1f580"
   ])
 
   await MarketMint.setMintPrice(ethers.utils.parseUnits(".1","ether"));
