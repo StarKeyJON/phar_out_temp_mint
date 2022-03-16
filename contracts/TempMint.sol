@@ -92,6 +92,8 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
   constructor(address deployer) {
     _setupRole(DEFAULT_ADMIN_ROLE, deployer);
     _setupRole(DEV_ROLE, deployer);
+    nftsRedeemed = 0;
+    mintPrice = 0;
   }
 
   //*~~~> Memory mappings
