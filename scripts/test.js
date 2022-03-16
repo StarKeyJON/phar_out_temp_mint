@@ -66,11 +66,13 @@ describe("MarketPlace TempMint Contract Unit Test", function() {
     console.log("___________Minter Memory___________")
     await mint.fetchNFTsCreatedByAddress("0xffad5d78dd52eb9538998472a22506bdea0632c3").then(ack=>{
         ack.forEach(res=>{
-            console.log("0xffad5d78dd52eb9538998472a22506bdea0632c3 minted: ",{
-                tokenId: res.tokenId.toNumber(),
-                contractAddress: res.contractAddress,
-                minter: res.minter
-            })
+            if(res.minter === "0xFfaD5D78dd52eB9538998472A22506BdEA0632C3"){
+                console.log("0xffad5d78dd52eb9538998472a22506bdea0632c3 minted: ",{
+                    tokenId: res.tokenId.toNumber(),
+                    contractAddress: res.contractAddress,
+                    minter: res.minter
+                })
+            }
         })
     })
     console.log("")
