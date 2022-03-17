@@ -1,6 +1,6 @@
 //*~~~> SPDX-License-Identifier: MIT 
 /*~~~> PHUNKS
-    Thank you for your inspiration and phriendship meant.
+    Thank you for your inspiration and phriendship.
       Never stop phighting, never surrender, always stand up for what is right and make the best of all situations towards all people.
       Phunks are phreedom phighters!
         "When the power of love overcomes the love of power the world will know peace." - Jimi Hendrix <3
