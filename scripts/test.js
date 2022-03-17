@@ -1,7 +1,12 @@
 /* eslint-disable prettier/prettier */
-const { ethers } = require("hardhat");
-const { BigNumber } = require("ethers");
 
+const { BigNumber } = require("ethers");
+/* eslint-disable prettier/prettier */
+const { ethers } = require("hardhat");
+const { use } = require("chai");
+const { solidity } = require("ethereum-waffle");
+
+use(solidity);
 describe("MarketPlace TempMint Contract Unit Test", function() {
   it("Should interact with the Redeem and Mint function in TempMint & PhamNFTs contracts.", async function() {
     before((done) => {
@@ -28,10 +33,13 @@ describe("MarketPlace TempMint Contract Unit Test", function() {
     
     console.log("")
     console.log("|__________Mint Price____________|")
+    console.log("|                                |")
     await mint.fetchMintPrice().then(res=>{
         const wei = BigNumber.from(res);
-        console.log("|              ",ethers.utils.formatEther(wei,"ether"),"             |")
+        console.log("|            ",ethers.utils.formatEther(wei,"ether"),"               |")
     })
+    console.log("|                                |")
+    console.log("|________________________________|")
         console.log("")
   await mint.redeemForNft(16, [
       "0x2f67a952b952593848D597102298ACf9253b841b", 
@@ -63,26 +71,15 @@ describe("MarketPlace TempMint Contract Unit Test", function() {
         })
     })
     console.log("")
-    console.log("___________Minter Memory___________")
-    await mint.fetchNFTsCreatedByAddress("0xffad5d78dd52eb9538998472a22506bdea0632c3").then(ack=>{
-        ack.forEach(res=>{
-            if(res.minter === "0xFfaD5D78dd52eB9538998472A22506BdEA0632C3"){
-                console.log("0xffad5d78dd52eb9538998472a22506bdea0632c3 minted: ",{
-                    tokenId: res.tokenId.toNumber(),
-                    contractAddress: res.contractAddress,
-                    minter: res.minter
-                })
-            }
-        })
-    })
-    console.log("")
     console.log("| __________ Mint Price __________ |")
+    console.log("|                                  |")
     /// Setting the mint price
     await mint.setMintPrice(ethers.utils.parseUnits(".1","ether"));
     await mint.fetchMintPrice().then(res=>{
         const wei = BigNumber.from(res);
         console.log("|              ",ethers.utils.formatEther(wei,"ether"),"               |")
     })
+    console.log("|                                  |")
     console.log("|__________________________________|")
     console.log("")
   // DEV_ROLE: 0x51b355059847d158e68950419dbcd54fad00bdfd0634c2515a5c533288c7f0a2
