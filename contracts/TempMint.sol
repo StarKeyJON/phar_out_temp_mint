@@ -1,7 +1,6 @@
 //*~~~> SPDX-License-Identifier: MIT 
-
 /*~~~> PHUNKS
-    Thank you Phunks, your inspiration and phriendship meant the world to me and helped me through hard times.
+    Thank you for your inspiration and phriendship meant.
       Never stop phighting, never surrender, always stand up for what is right and make the best of all situations towards all people.
       Phunks are phreedom phighters!
         "When the power of love overcomes the love of power the world will know peace." - Jimi Hendrix <3
@@ -82,7 +81,7 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
     address minter;
   }
 
-  //*~~~> Roles for designated accessibility
+  //*~~~> DEV_ROLE for designated accessibility
   bytes32 public constant DEV_ROLE = keccak256("DEV_ROLE");
   modifier hasDevAdmin(){
     require(hasRole(DEV_ROLE, msg.sender), "DOES NOT HAVE DEV ROLE");
@@ -99,30 +98,41 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
   //*~~~> Memory mappings
   mapping (uint256 => NFT) private _idToNft;
   
-  // Event declaration
+  // Event declarations
   event nftClaimed(uint nftId, address minter, address receiver);
   event Received(address, uint);
 
-  /*~~~>
-    Restricted access functions for mutable state variables  
-  <~~~*/
-  function setNftAddress(address _nftAddress) external hasDevAdmin returns(bool){
-    nftAddress = _nftAddress;
-    return true;
-  }
-
-  function setMintPrice(uint _price) external hasDevAdmin returns(bool){
-    mintPrice = _price;
+  /// @notice
+    /*~~~>
+      DEV_ROLE write function for setting the NFT contract address
+    <~~~*/
+  ///@dev 
+  //*~~~> uint contractAddress: address of new NFT contract
+  /// @return Bool
+  function setNftAddress(address contractAddress) external hasDevAdmin returns(bool){
+    nftAddress = contractAddress;
     return true;
   }
 
   /// @notice
     /*~~~>
-      Public interaction function for minting new NFTs incrementally
+      DEV_ROLE write function for setting the mint price
+    <~~~*/
+  ///@dev 
+  //*~~~> uint mintPrice: price in wei
+  /// @return Bool
+  function setMintPrice(uint mintPrice) external hasDevAdmin returns(bool){
+    mintPrice = mintPrice;
+    return true;
+  }
+
+  /// @notice
+    /*~~~>
+      Public write function for minting new NFTs incrementally
     <~~~*/
   ///@dev 
   //*~~~> uint howMany: howMany to mint
-  //*~~~> address[] calldata toWhom: who to send the NFT to
+  //*~~~> address[] calldata toWhom: who receives the NFT minted
   /// @return Bool
   function redeemForNft(uint howMany, address[] calldata toWhom) external payable whenNotPaused returns(bool){
     require(msg.value >= mintPrice * howMany);
@@ -137,9 +147,11 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
     return true;
   }
 
+  /// @notice
   /*~~~>
-  Functions for retrieving memory items
+    Public read function for retrieving internal memory items of NFTs minted
   <~~~*/
+  /// @return NFT[] memory array
   function fetchNFTsCreated() external view returns (NFT[] memory) {
     NFT[] memory nfts = new NFT[](nftsRedeemed);
     uint currentIndex;
@@ -150,20 +162,12 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
     }
     return nfts;
   }
-  
-  function fetchNFTsCreatedByAddress(address minter) external view returns (NFT[] memory) {
-    NFT[] memory nfts = new NFT[](nftsRedeemed);
-    uint currentIndex;
-    for (uint i = 0; i < nftsRedeemed; i++) {
-      if(_idToNft[i].minter == minter){
-        NFT storage currentItem = _idToNft[i];
-        nfts[currentIndex] = currentItem;
-        currentIndex++;
-      }
-    }
-    return nfts;
-  }
 
+  /// @notice
+  /*~~~>
+    Function for retrieving uint count of NFTs minted
+  <~~~*/
+  /// @return uint
   function fetchNFTsCreatedCount() external view returns (uint) {
     return nftsRedeemed;
   }
@@ -182,19 +186,20 @@ contract TempMint is ReentrancyGuard, Pausable, AccessControl {
 
   //*~~~> Fallback functions
   function onERC1155Received(address, address, uint256, uint256, bytes memory) external virtual returns (bytes4) {
-        return this.onERC1155Received.selector;
+      return this.onERC1155Received.selector;
     }
   function onERC721Received(
       address, 
       address, 
       uint256, 
       bytes calldata
-    )external pure returns(bytes4) {
-        return bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+    ) external pure returns(bytes4) {
+    return bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
   }
-    ///@notice
-  //*~~~> Withdraw function for ETH sent
-  function withdrawAmountFromContract(address _add) hasDevAdmin external {
-      payable(_add).transfer(address(this).balance);
+  
+  ///@notice
+  //*~~~> DEV_ROLE withdraw function for ETH sent
+  function withdrawAmountFromContract(address receiver) hasDevAdmin external {
+      payable(receiver).transfer(address(this).balance);
    }
 }
